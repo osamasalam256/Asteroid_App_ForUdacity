@@ -26,6 +26,10 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
+private val retrofit2 = Retrofit.Builder()
+    .addConverterFactory(ScalarsConverterFactory.create())
+    .baseUrl(BASE_URL)
+    .build()
 interface AsteroidsApiService {
 
     @GET(asteroidsKey)
@@ -37,19 +41,21 @@ interface AsteroidsApiService {
 
 }
 
+private val retrofitService: AsteroidsApiService by lazy {
+    retrofit.create(AsteroidsApiService::class.java)
+
+}
+private val retrofitService2: AsteroidsApiService by lazy {
+    retrofit2.create(AsteroidsApiService::class.java)
+
+}
 object NetRequestConverter{
     fun getAsteroidsList(): List<Asteroid> {
-        val asteroidResult = AsteroidsApi.retrofitService.getAllAsteroid(API)
-        return parseAsteroidsJsonResult(JSONObject(asteroidResult))
+        val asteroidResult = retrofitService2.getAllAsteroid(API)
+        return parseAsteroidsJsonResult(JSONObject(asteroidResult.toString()))
     }
 
     suspend fun getImage(): PictureOfDay{
-        return AsteroidsApi.retrofitService.getImageOfDay(API)
+        return retrofitService.getImageOfDay(API)
     }
-}
-object AsteroidsApi{
-    val retrofitService: AsteroidsApiService by lazy {
-         retrofit.create(AsteroidsApiService::class.java)
-    }
-
 }

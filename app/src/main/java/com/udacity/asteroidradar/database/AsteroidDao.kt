@@ -17,26 +17,23 @@ interface AsteroidDao {
 }
 
 @Database(entities = [AsteroidEntity::class], version = 1, exportSchema = false)
-abstract class AsteroidDatabase: RoomDatabase(){
+abstract class AsteroidDatabase: RoomDatabase() {
 
-abstract val asteroidDao: AsteroidDao
-
-    companion object {
-
-        @Volatile
-        private var INSTANCE: AsteroidDatabase? = null
-        fun getDatabase(context: Context): AsteroidDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context,
-                    AsteroidDatabase::class.java,
-                    "Asteroid_database")
-                    .build()
-                INSTANCE = instance
-
-                instance
-            }
-        }
-
-    }
+    abstract val asteroidDao: AsteroidDao
 }
+private  lateinit var INSTANCE: AsteroidDatabase
+
+fun getDatabase(context: Context): AsteroidDatabase {
+             synchronized(AsteroidDatabase::class.java) {
+                 if (!::INSTANCE.isInitialized){
+                     INSTANCE= Room.databaseBuilder(
+                         context,
+                         AsteroidDatabase::class.java,
+                         "AsteroidDatabase")
+                         .build()
+                 }
+            }
+    return INSTANCE
+}
+
+

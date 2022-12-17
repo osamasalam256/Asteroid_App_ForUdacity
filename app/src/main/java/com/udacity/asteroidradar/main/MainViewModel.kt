@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) :AndroidViewModel(application) {
 
-    private val asteroDatabase = AsteroidDatabase.getDatabase(application)
+    private val asteroDatabase = getDatabase(application)
     private val asteroRepository = AsteroidRepo(asteroDatabase)
 
 //    private val imgDatabase = ImageDatabase.getDatabase(application)
@@ -29,8 +29,8 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
     private val _todayDate = MutableLiveData<String>()
     val todayDate: LiveData<String> = _todayDate
 
-    private val _navigateToSelectedProperty = MutableLiveData<AsteroidEntity?>()
-    val navigateToSelectedProperty: LiveData<AsteroidEntity?> = _navigateToSelectedProperty
+    private val _navigateToSelectedProperty = MutableLiveData<AsteroDomain?>()
+    val navigateToSelectedProperty: LiveData<AsteroDomain?> = _navigateToSelectedProperty
 
     init {
         refreshData()
@@ -99,7 +99,7 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
 //            }
 //        }
 //    }
-    fun displayPropertyDetails(asteroProperty: AsteroidEntity) {
+    fun displayPropertyDetails(asteroProperty: AsteroDomain) {
         _navigateToSelectedProperty.value = asteroProperty
     }
 
