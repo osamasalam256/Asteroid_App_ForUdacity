@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Constants.getDayDate
 import com.udacity.asteroidradar.Constants.getLastDate
@@ -9,6 +10,7 @@ import com.udacity.asteroidradar.api.NetRequestConverter
 import com.udacity.asteroidradar.database.*
 import com.udacity.asteroidradar.domain.AsteroDomain
 import com.udacity.asteroidradar.repository.AsteroidRepo
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -34,7 +36,6 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
 
     init {
         refreshData()
-        //todayDate()
         getDayImage()
         getAllAstero()
     }
@@ -45,27 +46,38 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
                 asteroRepository.refreshAstroData()
 
             }catch (e:Exception){
-
+            Log.i("MainViewModel", "Exception: ${e.localizedMessage}")
             }
         }
     }
 
     fun getAllAstero(){
         viewModelScope.launch {
-            _asteroidList.value = asteroDatabase.asteroidDao.getAllAsteroids().value?.asDomainModel()
+            try {
+                asteroDatabase.asteroidDao.getAllAsteroids().collect{
+                    _asteroidList.value = it.asDomainModel()
+                }
+            }catch (e:Exception){
+                Log.i("MainViewModel", "get data from DB Exception: ${e.localizedMessage}")
+            }
+
         }
 
     }
     fun weekAsteroids(){
         viewModelScope.launch {
-        _asteroidList.value = asteroDatabase.asteroidDao
-            .getAsteroidWithSpecificDate(getDayDate(), getLastDate()).value?.asDomainModel()
+        asteroDatabase.asteroidDao
+            .getAsteroidWithSpecificDate(getDayDate(), getLastDate()).collect{
+                _asteroidList.value = it.asDomainModel()
+            }
         }
     }
     fun dayAsteroids(){
         viewModelScope.launch {
-            _asteroidList.value = asteroDatabase.asteroidDao
-                .getAsteroidWithSpecificDate(getDayDate(), getDayDate()).value?.asDomainModel()
+            asteroDatabase.asteroidDao
+                .getAsteroidWithSpecificDate(getDayDate(), getDayDate()).collect{
+                    _asteroidList.value = it.asDomainModel()
+                }
         }
     }
 

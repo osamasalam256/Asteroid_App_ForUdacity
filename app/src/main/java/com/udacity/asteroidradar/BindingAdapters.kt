@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.udacity.asteroidradar.R.drawable.*
 import com.udacity.asteroidradar.adapter.MainAdapter
 import com.udacity.asteroidradar.domain.AsteroDomain
 
@@ -12,18 +13,18 @@ import com.udacity.asteroidradar.domain.AsteroDomain
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
-        imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
+        imageView.setImageResource(ic_status_potentially_hazardous)
     } else {
-        imageView.setImageResource(R.drawable.ic_status_normal)
+        imageView.setImageResource(ic_status_normal)
     }
 }
 
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
-        imageView.setImageResource(R.drawable.asteroid_hazardous)
+        imageView.setImageResource(asteroid_hazardous)
     } else {
-        imageView.setImageResource(R.drawable.asteroid_safe)
+        imageView.setImageResource(asteroid_safe)
     }
 }
 

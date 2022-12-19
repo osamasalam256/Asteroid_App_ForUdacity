@@ -1,17 +1,21 @@
 package com.udacity.asteroidradar.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface AsteroidDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(asteroidList: List<AsteroidEntity>)
     @Query("SELECT * FROM AsteroidEntity ORDER BY closeApproachDate")
-    fun getAllAsteroids(): LiveData<List<AsteroidEntity>>
+    fun getAllAsteroids(): Flow<List<AsteroidEntity>>
 
-    @Query("SELECT * FROM AsteroidEntity WHERE closeApproachDate>= :startDate AND closeApproachDate<=:endDate ORDER BY closeApproachDate")
-    fun getAsteroidWithSpecificDate(startDate: String, endDate: String): LiveData<List<AsteroidEntity>>
+    @Query("SELECT * FROM AsteroidEntity WHERE closeApproachDate >= :startDate AND closeApproachDate <= :endDate ORDER BY closeApproachDate")
+    fun getAsteroidWithSpecificDate(startDate: String, endDate: String): Flow<List<AsteroidEntity>>
+
+    @Query("DELETE FROM AsteroidEntity WHERE closeApproachDate < :today")
+    suspend fun deletePreviousDayAstero(today: String)
 
 
 }
