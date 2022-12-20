@@ -17,15 +17,19 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     } else {
         imageView.setImageResource(ic_status_normal)
     }
+    imageView.contentDescription = imageView.context.getString(R.string.potentially_hazardous_asteroid_image)
 }
 
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.setImageResource(asteroid_hazardous)
+        imageView.contentDescription = imageView.context.getString(R.string.hazardous_asteroid_image)
     } else {
         imageView.setImageResource(asteroid_safe)
+        imageView.contentDescription = imageView.context.getString(R.string.not_hazardous_asteroid_image)
     }
+
 }
 
 @BindingAdapter("astronomicalUnitText")
@@ -53,7 +57,13 @@ fun bindRecyclerData(recyclerView: RecyclerView, asteroidList: List<AsteroDomain
 @BindingAdapter("imageOfDay")
 fun bindImageOfDay(image:ImageView,imageOfDay: PictureOfDay?) {
     imageOfDay?.let {
-        Picasso.with(image.context).load(it.url).into(image)
-        image.contentDescription = it.title
+        if (it.mediaType == "image"){
+            Picasso.with(image.context).load(it.url).into(image)
+            image.contentDescription = it.title
+        }else{
+            image.setImageResource(local_image)
+            image.contentDescription = image.context.getString(R.string.galaxy_with_asteroid)
+        }
+
     }
 }

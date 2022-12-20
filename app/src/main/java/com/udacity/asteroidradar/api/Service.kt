@@ -3,7 +3,7 @@ package com.udacity.asteroidradar.api
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants.API
+import com.udacity.asteroidradar.BuildConfig
 import com.udacity.asteroidradar.Constants.BASE_URL
 import com.udacity.asteroidradar.PictureOfDay
 import org.json.JSONObject
@@ -16,7 +16,7 @@ import retrofit2.http.Query
 
 const val asteroidsKey = "neo/rest/v1/feed"
 const val imageKey = "planetary/apod"
-
+ const val API = BuildConfig.NASA_API_KEY
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory()).build()
 

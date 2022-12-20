@@ -19,17 +19,12 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
     private val asteroDatabase = getDatabase(application)
     private val asteroRepository = AsteroidRepo(asteroDatabase)
 
-//    private val imgDatabase = ImageDatabase.getDatabase(application)
-//    private val imgRepo = ImageRepo(imgDatabase)
 
     private val _asteroidList= MutableLiveData<List<AsteroDomain>>()
     val asteroidList: LiveData<List<AsteroDomain>> =_asteroidList
 
     private val _dayImage= MutableLiveData<PictureOfDay>()
         val dayImage: LiveData<PictureOfDay> = _dayImage
-
-    private val _todayDate = MutableLiveData<String>()
-    val todayDate: LiveData<String> = _todayDate
 
     private val _navigateToSelectedProperty = MutableLiveData<AsteroDomain?>()
     val navigateToSelectedProperty: LiveData<AsteroDomain?> = _navigateToSelectedProperty
@@ -81,10 +76,6 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
         }
     }
 
-//    private fun todayDate(){
-//        _todayDate.value = getDayDate()
-//    }
-
     private fun getDayImage(){
         viewModelScope.launch {
             try{
@@ -95,22 +86,7 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
 
         }
     }
-//    fun refreshImage(){
-//        viewModelScope.launch {
-//            try {
-//                todayDate()
-//                if (_dayImage.value?.first()?.date != _todayDate.value ){
-//                    imgDatabase.imageDao.clearPreviousImage()
-//                    imgRepo.refreshImageData()
-//                    getDayImage()
-//                }else{
-//                    getDayImage()
-//                }
-//            }catch (e:Exception){
-//
-//            }
-//        }
-//    }
+
     fun displayPropertyDetails(asteroProperty: AsteroDomain) {
         _navigateToSelectedProperty.value = asteroProperty
     }
